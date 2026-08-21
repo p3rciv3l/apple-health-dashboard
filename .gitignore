@@ -1,0 +1,20 @@
+*.shortcut
+*.zip
+export.xml
+.wrangler/
+__pycache__/
+*.pyc
+.DS_Store
+
+# local dev / build junk
+node_modules/
+.dev.vars
+.env
+*.log
+
+# worker config with real bindings/secrets (keep wrangler.toml.example tracked)
+wrangler.toml
+wrangler.toml
+*.pem
+*.key
+secrets.*
