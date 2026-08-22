@@ -10,7 +10,7 @@ import { pathToFileURL } from 'node:url';
 const src = readFileSync(new URL('../worker/worker.js', import.meta.url), 'utf8');
 const appJsMatch = src.match(/const APP_JS = `([\s\S]*?)`;\nfunction appVer/);
 const appJs = appJsMatch ? appJsMatch[1] : '';
-const pageTpl = src.slice(src.indexOf('function chartPage'), src.indexOf('function loginPage'));
+const pageTpl = src.slice(src.indexOf('function chartPage'), src.indexOf('const HAPP_JS'));
 
 let failures = 0;
 const check = (feature, ok, detail = '') => {
@@ -35,6 +35,8 @@ check('Blow-up renderer present', /function blowPanel|blowPanel\s*=/.test(appJs 
 check('Clear-view mask geometry', /eng\.smB = eng\.smB \|\| \[\]/.test(src) && /mask="url\(/.test(src), 'smB collect/masked emit pass missing - Clear bands will stack colors');
 check('Clear avg band clips to next band top', /bandTops\[q\] !== null/.test(src), 'f2c2dd2 next-band-top clip missing');
 check('Workout entry pane (record sheet)', /wkedit/.test(src));
+check('/health page + app bundle', /const HAPP_JS = `/.test(src) && /<title>health<\/title>/.test(src));
+check('Health ingest route', /\/health\/ingest/.test(src));
 check('workout.json endpoint', /workout\.json/.test(src));
 check('data.json streams items live', /ITEMS/.test(appJs) && /items/.test(src));
 
@@ -49,7 +51,7 @@ else {
   const rows = [{ date: today, calories: 500, protein: 40, carbs: 50, fat: 20, sugar: 10, sodium: 100, fiber: 5 }];
   const items = { [today]: [{ title: 'guard test meal', cal: 500, p: 40, c: 50, f: 20 }] };
   const wk = { splits: { Legs: [{ date: today, title: '', ex: { 'Ballerina Squat': [[135, 6]] }, w: { 'Ballerina Squat': 135 }, raw: {} }] }, errors: {} };
-  const html = mod.chartPage(rows, { source: 'guard' }, wk, '', true, null, items);
+  const html = mod.chartPage(rows, { source: 'guard' }, wk, '', true, null, null, items);
   check('render: Average button in built HTML', html.includes('data-avg="1"'));
   check('render: time selector in built HTML', ['data-w="3"', 'data-w="7"', 'data-w="0"'].every(m => html.includes(m)));
   check('render: item rows embedded for blow-ups', html.includes('guard test meal'), 'items payload not baked into page');
