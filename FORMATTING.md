@@ -67,6 +67,10 @@ Every row title carries the specific brand and full product name when one is est
 
 The day breakdown reads as a list of ingredients, not meal names. Name rows like ingredients (product name first), never like dishes you assembled yourself ("stir fry", "bowl"). If he ate several things together, they are still one row per item per Rule 1. (Implementation note: the Log database's title property stays named "Meal" because the worker reads that property name; the content convention changes, not the schema.)
 
+## Rule 10: every row carries its macro evidence
+
+Every row must carry evidence for its numbers: a photo of the package label or supplier evidence (email or published page). The link or file goes in the row's Source URL property - label-photo link for pantry/home items, supplier product page for published-basis items, the supplier email for email-sourced numbers. If the only evidence is a prior established row, leave Source empty and keep the Items basis note naming that row. Never let a row's macros rest on an unlabeled claim.
+
 ## Known product bases (registry)
 
 Established per-unit bases; always back into macros from these, never re-derive. Percentages/fractions stay exact per Rule 6.
@@ -75,10 +79,11 @@ Established per-unit bases; always back into macros from these, never re-derive.
 - Alexandre Family Farm A2 6% milk: carton = 1,620 kcal, 66g protein
 - Sascha Fitness Hydrolyzed Whey Protein Isolate: 2 scoops (66g) = 220 kcal, 50g protein (110/25p per scoop)
 - Kirkland Signature liquid egg whites: per serving (3 Tbsp / 46g) = 25 kcal, 5g protein, 1g carb, 75mg sodium
+- Whole Foods Market Pasteurized Liquid Egg Whites: per serving (3 Tbsp / 46g) = 20 kcal, 5g protein, 80mg sodium (~10 servings per 16oz carton). Carton photoed 2026-08-21; owner confirmed carton is finished - historical rows on the Kirkland basis stand as logged. Use this basis for any future carton of this product; Kirkland stays the basis for Kirkland rows.
 - Bragg Nutritional Yeast: per 2 Tbsp (10g) = 40 kcal, 5g protein, 3g carb, 2g fiber, 20mg sodium
 - Springfield Creamery cottage cheese: per 1/2 cup (110g) = 80 kcal, 14g protein, 2g fat, 4g carb, 4g sugar, 300mg sodium
 - Wildwood Organic High Protein Tofu (super firm): per 91g serving = 130 kcal, 14g protein, 7g fat (1.5g sat), 2g carb, 2g fiber, 10mg sodium; 5 servings per 16oz pack (block = 650 kcal, 70g protein)
 - Hodo Organic Extra Firm Tofu: per 3oz (85g) serving = 120 kcal, 14g protein, 4.5g fat (0g sat), 6g carb, 2g fiber, 0mg sodium; ~3 servings per 10oz/284g pack (package-front badge says 48g protein per package). In pantry as of 2026-08-21, use-by 09/30/26, not yet eaten - first row gets created on first use.
 - 365 by Whole Foods Market organic cage-free large brown eggs: per whole large egg = 70 kcal, 6g protein, 5g fat (1.5g sat), 70mg sodium
-- Once Again Unsweetened Crunchy Peanut Butter (no salt added): per serving per photo'd label (2026-08-20 row)
+- Once Again Unsweetened Crunchy Peanut Butter (no salt added): per 2 Tbsp (32g) = 190 kcal, 8g protein, 14g fat (2g sat), 7g carb, 2g fiber, 2g sugar, 0mg sodium (label photo 2026-08-21, same values as the 2026-08-20 row)
 - Siggi's nonfat plain skyr (0%): per 24oz tub basis per label (2026-08-13 row)
