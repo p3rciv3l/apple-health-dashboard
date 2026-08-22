@@ -3617,7 +3617,32 @@ function alignBlowList(panel) {
   {
     const segsEls = Array.from(bar.children);
     const mids = segsEls.map(el => el.offsetTop + el.offsetHeight / 2);
-    const hs = rows.map(n => n.offsetHeight);
+    let hs = rows.map(n => n.offsetHeight);
+    /* Owner 8/22 (12-row carbs blow-up: the last item lands on the Total row,
+       "in the extreme case shrink the item-dot size, the name font and the
+       value font so everything fits; adaptive, normal case unchanged"): when
+       the rows cannot stack above the Total with the dodge pass, scale the
+       row typography down until they fit - dot size, name/value font, and
+       row padding move together. The factor is length-computed (stack the
+       rows need / space above the Total) and floored at 0.5 so text never
+       collapses. Comfortable lists get k = 1 and nothing moves. */
+    {
+      const totalEl0 = list.querySelector('.blow-total');
+      const limit0 = H - (totalEl0 ? totalEl0.offsetHeight : 0) - 10;
+      const needed = hs.reduce((a, h) => a + h, 0) + 2 * Math.max(rows.length - 1, 0);
+      if (needed > limit0 && needed > 0) {
+        const k = Math.max(0.5, limit0 / needed);
+        rows.forEach(n => {
+          n.style.fontSize = (12 * k) + 'px';
+          n.style.paddingTop = n.style.paddingBottom = (3 * k) + 'px';
+          n.style.gap = (8 * k) + 'px';
+          const dot = n.querySelector('.dot');
+          if (dot) { dot.style.width = (8 * k) + 'px'; dot.style.height = (8 * k) + 'px'; }
+        });
+        // Re-measure with the shrunk rows so the dodge pass sees real heights.
+        hs = rows.map(n => n.offsetHeight);
+      }
+    }
     // Every row starts exactly at its own slice's vertical center. A row
     // moves ONLY when it genuinely collides with a neighbour, and the shift
     // ripples through the colliding chain only - rows with room to spare
@@ -8963,7 +8988,32 @@ function alignBlowList(panel) {
   {
     const segsEls = Array.from(bar.children);
     const mids = segsEls.map(el => el.offsetTop + el.offsetHeight / 2);
-    const hs = rows.map(n => n.offsetHeight);
+    let hs = rows.map(n => n.offsetHeight);
+    /* Owner 8/22 (12-row carbs blow-up: the last item lands on the Total row,
+       "in the extreme case shrink the item-dot size, the name font and the
+       value font so everything fits; adaptive, normal case unchanged"): when
+       the rows cannot stack above the Total with the dodge pass, scale the
+       row typography down until they fit - dot size, name/value font, and
+       row padding move together. The factor is length-computed (stack the
+       rows need / space above the Total) and floored at 0.5 so text never
+       collapses. Comfortable lists get k = 1 and nothing moves. */
+    {
+      const totalEl0 = list.querySelector('.blow-total');
+      const limit0 = H - (totalEl0 ? totalEl0.offsetHeight : 0) - 10;
+      const needed = hs.reduce((a, h) => a + h, 0) + 2 * Math.max(rows.length - 1, 0);
+      if (needed > limit0 && needed > 0) {
+        const k = Math.max(0.5, limit0 / needed);
+        rows.forEach(n => {
+          n.style.fontSize = (12 * k) + 'px';
+          n.style.paddingTop = n.style.paddingBottom = (3 * k) + 'px';
+          n.style.gap = (8 * k) + 'px';
+          const dot = n.querySelector('.dot');
+          if (dot) { dot.style.width = (8 * k) + 'px'; dot.style.height = (8 * k) + 'px'; }
+        });
+        // Re-measure with the shrunk rows so the dodge pass sees real heights.
+        hs = rows.map(n => n.offsetHeight);
+      }
+    }
     // Every row starts exactly at its own slice's vertical center. A row
     // moves ONLY when it genuinely collides with a neighbour, and the shift
     // ripples through the colliding chain only - rows with room to spare
