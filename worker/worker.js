@@ -1933,8 +1933,9 @@ const SVGCharts = (function () {
         if (model.mode === 'smooth') { parts.push(smoothDS(ds, di, sc)); return; }
         parts.push(barDS(ds, di, sc));
       });
-      /* Ghosts at today's empty slot (Owner 8/15, LOCKED): the average of each
-         shown macro's logged days inside the selected window, drawn at
+      /* Ghosts at today's empty slot (Owner 8/15, LOCKED; Owner 8/22 basis now
+         fixed past-7-days): the average of each shown macro's logged days in
+         the fixed past-7-day lookback, drawn at
          today's slot. Raw: translucent fill + dotted-dash edge, one bar per
          macro. Smooth modes (Owner 8/15 v3, "the ghost stacked chart is still a
          stacked chart"): NOT separate bars - each macro's band CONTINUES
@@ -3873,11 +3874,15 @@ function render(w) {
   const fitMin = axis => { const g = goalVals(axis); const lo = g.length ? Math.min.apply(null, g) : 0; return lo < 0 ? lo * 1.08 : undefined; };
   const tooltipEnabled = !(window.innerWidth <= 560 || (navigator.maxTouchPoints || 0) > 0);
   /* Owner 8/15 (ghosts, LOCKED basis): when the axis ends today and today is
-     unlogged, project each shown macro into today's empty slot from the
-     AVERAGE OF THAT MACRO'S LOGGED DAYS INSIDE THE CURRENT WINDOW (3d / 7d /
-     All-time / Custom - whatever range is selected). Skip days (null slots)
-     count for nothing. Calculation-only, never persisted. Average view
-     untouched; logged days render real values only. */
+     unlogged, project each shown macro into today's empty slot from an
+     average of that macro's logged days. Owner 8/22 ("I'd prefer it to be
+     the average of the past seven days... the seventh day back is not
+     visible on the chart. That's okay"): the lookback is FIXED to the past
+     7 CALENDAR DAYS (today-7 through today-1), read from the full row set,
+     not from the visible window - in the default 7d view that means the 7th
+     contributing day sits just off-chart. Skip days (null slots) count for
+     nothing. Calculation-only, never persisted. Average view untouched;
+     logged days render real values only. */
   /* Owner 8/17 ("show the ghost graph for each day even as I start filling it
      out... instead of average fill this ghost graph (the post logged ghost
      graph) with the ideal values"): today's ghost no longer disappears on the
@@ -3893,7 +3898,10 @@ function render(w) {
       if (todayLogged && m.goal !== null && m.goal !== undefined && isFinite(m.goal)) {
         vals[pi] = m.goal; any = true;
       } else {
-        const vs = slots.map(r => (r ? r[m.key] : null)).filter(v => v !== null && v !== undefined && isFinite(v));
+        /* Owner 8/22: fixed 7-day lookback (today-7..today-1), window-independent. */
+        const d0wk = new Date(todayS + 'T00:00:00'); d0wk.setDate(d0wk.getDate() - 7);
+        const loS = isoLocal(d0wk);
+        const vs = ROWS.filter(r => r.date >= loS && r.date < todayS).map(r => r[m.key]).filter(v => v !== null && v !== undefined && isFinite(v));
         if (vs.length) { vals[pi] = round1(vs.reduce((a, v) => a + v, 0) / vs.length); any = true; }
       }
     });

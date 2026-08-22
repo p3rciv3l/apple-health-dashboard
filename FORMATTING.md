@@ -58,6 +58,7 @@ Log the fraction the owner actually said ("96% of one", "7/8 of the pie"), scale
 
 - Never email or otherwise contact a company/vendor about nutrition info. Use published pages, labels on hand, or in-house anchors only. If numbers can't be grounded, estimate honestly and say so in Items - do not fabricate a "published" source.
 - If the owner corrects a row, fix the row AND its Items basis, and if the correction generalizes, add the rule here.
+- A cart screenshot is not a receipt. For delivery orders, ground macros on the post-checkout order page (DoorDash Order Complete / confirmation receipt) before logging - carts change at checkout (the 2026-08-21 Taco Bell cart showed a Cheesy Roll Up the real order never had). When the receipt and an earlier estimate disagree, the receipt wins and the wrong row gets deleted, not adjusted.
 
 ## Rule 8: name rows by specific brand + product name
 
