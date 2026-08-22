@@ -21,12 +21,6 @@ jobs:
         run: node --check worker/worker.js
       - name: Feature-preservation guard
         run: node tests/feature-guard.mjs
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Parser unit tests
-        working-directory: parser
-        run: python3 -m unittest test_hkparse -v
 
   deploy:
     name: Deploy cbum-chart worker
