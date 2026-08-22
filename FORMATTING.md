@@ -72,6 +72,15 @@ The day breakdown reads as a list of ingredients, not meal names. Name rows like
 
 Every row must carry evidence for its numbers: a photo of the package label or supplier evidence (email or published page). The link or file goes in the row's Source URL property - label-photo link for pantry/home items, supplier product page for published-basis items, the supplier email for email-sourced numbers. If the only evidence is a prior established row, leave Source empty and keep the Items basis note naming that row. Never let a row's macros rest on an unlabeled claim.
 
+## Rule 11: photos are primary input - always log from them
+
+When the user sends a photo, treat it as the primary logging input, never an afterthought.
+
+- Package/nutrition-label photo: read the panel off the photo and log exact label values per serving. Attach the photo (or its link) as the Rule 10 evidence. If this is the product's first appearance, add its anchor to the registry below; if it is a known product, still verify the label against the registry and flag any mismatch instead of silently switching bases.
+- Plate/food photo: identify the items and the visible quantities, ground each item's macros from an established base or a published label, and write in Items what the photo identified versus what you assumed. A blurry or unreadable photo gets an honest estimate, not invented precision.
+- Container math from photos: if the photo shows a container (block, carton, jar) with prior consumption in the log, run the container tally in Items (opened date, servings taken, what remains) and carry the % exactly per Rule 6.
+- Never guess macros a label doesn't show. If the photo doesn't establish a number, ground it elsewhere or say so in Items.
+
 ## Known product bases (registry)
 
 Established per-unit bases; always back into macros from these, never re-derive. Percentages/fractions stay exact per Rule 6.

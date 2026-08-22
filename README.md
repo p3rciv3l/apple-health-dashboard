@@ -93,4 +93,10 @@ FORMATTING.md               THE contract for agents writing rows to the Log data
    /tmp/out` writes the shortcut files; the ingest key is read at run time
    from a text file in iCloud Drive, never baked into the shortcut.
 
+Point your agent at [FORMATTING.md](FORMATTING.md) and it logs the way this system is run: you send it a
+photo of a package label or a plate, it identifies items and quantities, grounds macros deterministically
+(label text in the photo > its established product bases > a published source - never a guess), logs one row
+per item with the evidence attached, and runs the container tally when a photo shows a partially-used
+container.
+
 Cloudflare's free tier is nowhere near a constraint for one person's data.
