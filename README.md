@@ -2,8 +2,6 @@
 
 Text your agent to log all workouts and food eaten. The agent will also store all ingredients that you use in #meals so that macro tracking can be a bit more deterministic.
 
-![The macros chart](docs/assets/hero.png)
-
 ![Tap a day, switch the window, flip to the average](docs/assets/demo.gif)
 
 | Day blow-up | Workout progress |
