@@ -1,0 +1,29 @@
+# Rename to wrangler.toml (git-ignored) and fill in your own IDs.
+# The same values must ALSO be set on the deployed worker: the CI deploy
+# script merges existing settings, so add these once via the dashboard or
+# `wrangler secret put` / variables, and they survive every deploy.
+name = "cbum-chart"
+main = "worker/worker.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+# Notion database IDs (share each database with your Notion integration)
+DATABASE_ID = "PASTE_ROLLUP_DB_ID"        # one row per day, numeric macro columns
+NOTION_LOG_DB = "PASTE_LOG_DB_ID"         # one row per item (see FORMATTING.md)
+WORKOUT_DB_PUSH = "PASTE_PUSH_DB_ID"
+WORKOUT_DB_PULL = "PASTE_PULL_DB_ID"
+WORKOUT_DB_LEGS = "PASTE_LEGS_DB_ID"
+# Optional: date-keyed Notion page links for the desktop day popup
+DAY_PAGES_JSON = '{"2026-08-12": "https://app.notion.com/p/..."}'
+
+[[kv_namespaces]]
+binding = "CHART_KV"
+id = "PASTE_KV_NAMESPACE_ID"   # wrangler kv namespace create CHART_KV
+
+# Secrets (never in this file):
+#   NOTION_TOKEN        Notion internal integration token
+#   GATE_PASSWORD       chart login password - keep it in your password manager
+#   EMBED_TOKEN         legacy; the live embed capability is the embed_token_v1 KV key
+# Set with:  wrangler secret put <NAME>
+#
+# CI Smoke reads: secret SMOKE_K (current embed ?k= token) + variable SMOKE_BASE (worker URL).
