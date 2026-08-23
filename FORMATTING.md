@@ -81,6 +81,10 @@ When the user sends a photo, treat it as the primary logging input, never an aft
 - Container math from photos: if the photo shows a container (block, carton, jar) with prior consumption in the log, run the container tally in Items (opened date, servings taken, what remains) and carry the % exactly per Rule 6.
 - Never guess macros a label doesn't show. If the photo doesn't establish a number, ground it elsewhere or say so in Items.
 
+## Rule 12: after-midnight food counts against the day he's ending
+
+Food eaten after midnight belongs to the day the owner is finishing, not the calendar date. A 12:20am Sunday snack or late dinner goes on Saturday's row. Set Date to that earlier day and say in Items that it was eaten after midnight and which day it counts against. (Owner rule, 2026-08-23.)
+
 ## Known product bases (registry)
 
 Established per-unit bases; always back into macros from these, never re-derive. Percentages/fractions stay exact per Rule 6.
