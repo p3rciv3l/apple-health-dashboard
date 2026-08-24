@@ -48,6 +48,10 @@ Brand named means brand looked up - owner, verbatim: "always if I tell u the bra
 
 The home milk is **Alexandre Family Farm A2 6%**. Never call it "whole milk" in a title or basis - say "A2 milk" (or "Alexandre A2 6%"). A drink OUT that contains whole milk keeps the venue's own description (e.g. a cafe's "pandan banana matcha with whole milk" stays as the venue describes it).
 
+## Rule 4b: the owner is vegetarian
+
+Avi eats no meat and no fish. This resolves menu ambiguity without asking him: when a dish comes in variants and the alternatives are meat or fish, the vegetarian one is the one he had - record it in Items as resolved by dietary constraint, not as a guess. (Owner-confirmed 2026-08-23.)
+
 ## Rule 5: venues keep their own words
 
 Restaurant/venue rows keep the venue's dish name and description in the title (e.g. `Sorella - Burrata, heirloom tomato & peach salad (small plate)`), prefixed with the venue. Pick the Type that matches the evidence: published macros only if the venue/vendor actually publishes them, else estimated - and say how the estimate was built in Items.
