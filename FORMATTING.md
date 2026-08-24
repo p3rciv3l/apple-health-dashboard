@@ -91,6 +91,14 @@ When the user sends a photo, treat it as the primary logging input, never an aft
 
 Food eaten after midnight belongs to the day the owner is finishing, not the calendar date. A 12:20am Sunday snack or late dinner goes on Saturday's row. Set Date to that earlier day and say in Items that it was eaten after midnight and which day it counts against. (Owner rule, 2026-08-23.)
 
+## Rule 13: every row carries all eight nutrients
+
+No blank macro fields. Calories, protein, carbs, fat, saturated fat, sugar, fiber and sodium all get a number on every row: the label when there is one, otherwise a documented reference food (USDA or equivalent) with the reference and the reasoning written into Items. This replaces the old "leave it empty rather than invent precision" habit, which was right about not fabricating precision and wrong about the consequence - the chart summed only the filled rows and rendered a silently partial day as a confident total (owner caught it 2026-08-23: sodium 176mg on a day with restaurant mac and two samosas).
+
+Empty is reserved for genuinely unknowable cases, and when you use it, say in Items why. A true zero is not a gap - milk has no fiber, soda has no fat - so write the 0 and say it is a label zero.
+
+The chart now marks any day that still has a blank: that nutrient renders as "1,240+" with an amber "partial - N of M items missing" note and the day title carries a partial badge, so a floor never reads as a total.
+
 ## Known product bases (registry)
 
 Established per-unit bases; always back into macros from these, never re-derive. Percentages/fractions stay exact per Rule 6.
