@@ -1,5 +1,5 @@
 const CAL_TARGET = 1950;
-const PRO_TARGET = 135;
+const PRO_TARGET = 150;
 const COOKIE = "cbum_gate";
 const COOKIE_P = "cbum_gate_p";
 const CACHE_KEY = "rows_cache_v1";
@@ -22,7 +22,7 @@ const ORDER_KEY = "col_order_v1";
 const GOALS_KEY = "goals_v1";
 // Example starting targets. The owner can change any of them at /goals;
 // whatever is saved there wins over these defaults.
-const DEFAULT_GOALS = { calories: 1950, protein: 135, carbs: 198, fat: 60, satfat: 15, sugar: 50, fiber: 30, sodium: 2300 };
+const DEFAULT_GOALS = { calories: 1950, protein: 150, carbs: 198, fat: 60, satfat: 15, sugar: 50, fiber: 30, sodium: 2300 };
 const GOAL_FIELDS = [
   ["calories", "Calories", "kcal"], ["protein", "Protein", "g"], ["carbs", "Carbs", "g"], ["fat", "Fat", "g"],
   ["satfat", "Saturated fat", "g"], ["sugar", "Sugar", "g"], ["fiber", "Fiber", "g"], ["sodium", "Sodium", "mg"]
@@ -413,9 +413,16 @@ async function notionItems(env) {
       const d = props.Date && props.Date.date && props.Date.date.start;
       if (!d) continue;
       const num = (name) => { const v = props[name]; return v && v.type === "number" ? (v.number || 0) : 0; };
+      /* Owner 8/23 ("sodium 176 on a day with mac and two samosas is
+         impossible"): a blank nutrient used to arrive as 0 and vanish into the
+         day sum, so a partial total rendered as a confident one. Tuple slot 10
+         records which nutrients THIS row left blank, so the chart can say so. */
+      const blank = (name) => { const v = props[name]; return !(v && v.type === "number" && v.number !== null && v.number !== undefined); };
+      const gaps = [["Calories","calories"],["Protein","protein"],["Carbs","carbs"],["Fat","fat"],["Saturated Fat","satfat"],["Sugar","sugar"],["Fiber","fiber"],["Sodium","sodium"]]
+        .filter(pair => blank(pair[0])).map(pair => pair[1]).join(",");
       const title = props.Meal && props.Meal.title && props.Meal.title[0] ? props.Meal.title[0].plain_text : "item";
       const day = d.slice(0, 10);
-      (byDay[day] = byDay[day] || []).push([title, num("Calories"), num("Protein"), num("Carbs"), num("Fat"), num("Saturated Fat"), num("Sugar"), num("Fiber"), num("Sodium"), "https://www.notion.so/" + String(p.id || "").replace(/-/g, "")]);
+      (byDay[day] = byDay[day] || []).push([title, num("Calories"), num("Protein"), num("Carbs"), num("Fat"), num("Saturated Fat"), num("Sugar"), num("Fiber"), num("Sodium"), "https://www.notion.so/" + String(p.id || "").replace(/-/g, ""), gaps]);
     }
     cursor = data.has_more ? data.next_cursor : undefined;
   } while (cursor);
@@ -824,6 +831,9 @@ const CSS = `
   .svgtip .r { display:flex; align-items:center; height:14.4px; }
   .svgtip .r + .r { margin-top:2px; }
   .svgtip .chip { width:12px; height:12px; display:inline-block; margin-right:14px; flex:0 0 auto; }
+  /* Partial-day marks (Owner 8/23): amber, never the same weight as a real number. */
+  .svgtip .pt { color:#b06a00; margin-left:8px; font-size:11px; }
+  .svgtip .pb { color:#b06a00; font-weight:600; }
   /* Stacked-view day blow-up: full-bleed bands that cancel the panel padding */
   .daystack { margin:0 -6px 10px -10px; }
   .daystack .ds-band { display:flex; height:44px; }
@@ -1154,6 +1164,18 @@ let ITEMS = window.__D.items;
 const SHORTS = ITEMS.__short || {}; delete ITEMS.__short;
 // Item tuple: [name, calories, protein, carbs, fat, satfat, sugar, fiber, sodium]
 const ITEM_KEYS = ['calories','protein','carbs','fat','satfat','sugar','fiber','sodium'];
+/* Owner 8/23: item tuple slot 10 lists the nutrients that row left blank in
+   Notion. A day is PARTIAL for a nutrient when any of its rows left that
+   nutrient blank - the bar and the tooltip number are then a floor, not a
+   total, and must never render as a plain figure. */
+function itemGaps(it) { const g = it && it[10]; return g ? String(g).split(',') : []; }
+function gapCount(date, key) {
+  const list = (date && ITEMS[date]) || [];
+  let n = 0;
+  for (let i = 0; i < list.length; i++) if (itemGaps(list[i]).indexOf(key) >= 0) n++;
+  return n;
+}
+function dayItemCount(date) { return ((date && ITEMS[date]) || []).length; }
 const CAL_TARGET = window.__D.calTarget, PRO_TARGET = window.__D.proTarget;
 const GREEN = '#3E7C4F', ORANGE = '#eb6e00', GRID = '#ececec', AXIS = '#c1c1c1', TICK = '#797979';
 // Every macro the tracker rolls up. goal:null means no target has been set for
@@ -2424,17 +2446,27 @@ const SVGCharts = (function () {
       /* Ghost slot: values come from model.ghosts (not ds.data), and the
          title carries a green Projected badge (Owner 8/15). */
       const proj = els.some(e => e.proj) && model.ghostAt != null && idx === model.ghostAt && model.ghosts;
+      /* Owner 8/23: a nutrient with blank rows behind it reads "1,240+" with an
+         amber "partial" note, and the day title carries a partial badge. A
+         glance at the card has to show the number is a floor. */
+      const dts = model.dayDates;
+      const date = (!proj && dts) ? dts[idx] : null;
+      let anyPartial = false;
       let rows = '';
       for (const e of els) {
         const dsm = model.datasets[e.di];
         const v = proj ? model.ghosts[e.di] : dsm.data[idx];
         if (v === null || v === undefined || !isFinite(v)) continue;
+        const miss = (date && dsm.key) ? gapCount(date, dsm.key) : 0;
+        if (miss) anyPartial = true;
         rows += '<div class="r"><span class="chip" style="background:' + dsm.color + '"></span><span>' +
-          escXml(dsm.label) + ': ' + escXml(new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(Math.round(v))) + '</span></div>';
+          escXml(dsm.label) + ': ' + escXml(new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(Math.round(v))) + (miss ? '+' : '') + '</span>' +
+          (miss ? '<span class="pt">partial &middot; ' + miss + ' of ' + dayItemCount(date) + ' items missing</span>' : '') + '</div>';
       }
       if (!rows) return null;
       return '<div class="t">' + escXml(title) +
-        (proj ? ' <span style="color:#3E7C4F;font-weight:600">&middot; Projected</span>' : '') + '</div>' + rows;
+        (proj ? ' <span style="color:#3E7C4F;font-weight:600">&middot; Projected</span>' : '') +
+        (anyPartial ? ' <span class="pb">&middot; partial</span>' : '') + '</div>' + rows;
     }
     /* Workout-chart tooltip feel for macros too (Owner 8/15, live prod: "not
        nearly as buttery"): ONE shared glide rule - the card follows the live
@@ -3841,7 +3873,7 @@ function render(w) {
     labels.push('Average');
     avgDaysLabel = n + ' logged day' + (n === 1 ? '' : 's');
     datasets = means.map(x => ({
-      kind: mMode === 'smooth' ? 'smooth' : 'bar', label: x.m.label, data: [x.avg === null ? null : round1(x.avg)],
+      kind: mMode === 'smooth' ? 'smooth' : 'bar', key: x.m.key, label: x.m.label, data: [x.avg === null ? null : round1(x.avg)],
       color: x.m.color, hover: shade(x.m.color, 0.16), axis: axisFor(x.m),
       goal: (x.m.goal === null || x.m.goal === undefined) ? null : x.m.goal
     }));
@@ -3855,7 +3887,7 @@ function render(w) {
     }
   } else if (mMode === 'smooth') {
     datasets = plotted.map(m => ({
-      kind: 'smooth', label: m.label, data: slots.map(r => (r ? r[m.key] : null)),
+      kind: 'smooth', key: m.key, label: m.label, data: slots.map(r => (r ? r[m.key] : null)),
       // Opaque view (Owner 8/15): same dual axes as the clear view (kcal/mg left,
       // grams right) but fills render SOLID - no transparency. Hierarchy is
       // paint order only: the lower the series' raw number, the later it paints
@@ -3879,7 +3911,7 @@ function render(w) {
     }
   } else {
     datasets = plotted.map(m => ({
-      kind: 'bar', label: m.label, data: slots.map(r => (r ? r[m.key] : null)), axis: axisFor(m),
+      kind: 'bar', key: m.key, label: m.label, data: slots.map(r => (r ? r[m.key] : null)), axis: axisFor(m),
       color: m.color, hover: shade(m.color, 0.16)
     }));
   }

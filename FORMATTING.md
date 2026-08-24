@@ -42,9 +42,15 @@ Established anchors (do not silently change):
 
 First-ever row for a packaged item: use the product's own label, cite it in Source, and record label-per-serving + serving count in Items so the next agent can scale it.
 
+Brand named means brand looked up - owner, verbatim: "always if I tell u the brand that's what u look up." Pull that brand's own label before any number moves; do not substitute a generic or a similar product. A relayed estimate never beats a real label. If someone hands you cal/protein for a packaged product and the product's own label says otherwise, log the label numbers, mark the row `Home - packaged label`, and report the delta back with the label link - do not carry the estimate to stay consistent with what was already said. (Owner-confirmed 2026-08-23.)
+
 ## Rule 4: milk is never "whole milk" at home
 
 The home milk is **Alexandre Family Farm A2 6%**. Never call it "whole milk" in a title or basis - say "A2 milk" (or "Alexandre A2 6%"). A drink OUT that contains whole milk keeps the venue's own description (e.g. a cafe's "pandan banana matcha with whole milk" stays as the venue describes it).
+
+## Rule 4b: the owner is vegetarian
+
+Avi eats no meat and no fish. This resolves menu ambiguity without asking him: when a dish comes in variants and the alternatives are meat or fish, the vegetarian one is the one he had - record it in Items as resolved by dietary constraint, not as a guess. (Owner-confirmed 2026-08-23.)
 
 ## Rule 5: venues keep their own words
 
@@ -81,6 +87,10 @@ When the user sends a photo, treat it as the primary logging input, never an aft
 - Container math from photos: if the photo shows a container (block, carton, jar) with prior consumption in the log, run the container tally in Items (opened date, servings taken, what remains) and carry the % exactly per Rule 6.
 - Never guess macros a label doesn't show. If the photo doesn't establish a number, ground it elsewhere or say so in Items.
 
+## Rule 12: after-midnight food counts against the day he's ending
+
+Food eaten after midnight belongs to the day the owner is finishing, not the calendar date. A 12:20am Sunday snack or late dinner goes on Saturday's row. Set Date to that earlier day and say in Items that it was eaten after midnight and which day it counts against. (Owner rule, 2026-08-23.)
+
 ## Known product bases (registry)
 
 Established per-unit bases; always back into macros from these, never re-derive. Percentages/fractions stay exact per Rule 6.
@@ -97,3 +107,4 @@ Established per-unit bases; always back into macros from these, never re-derive.
 - 365 by Whole Foods Market organic cage-free large brown eggs: per whole large egg = 70 kcal, 6g protein, 5g fat (1.5g sat), 70mg sodium
 - Once Again Unsweetened Crunchy Peanut Butter (no salt added): per 2 Tbsp (32g) = 190 kcal, 8g protein, 14g fat (2g sat), 7g carb, 2g fiber, 2g sugar, 0mg sodium (label photo 2026-08-21, same values as the 2026-08-20 row)
 - Siggi's nonfat plain skyr (0%): per 24oz tub basis per label (2026-08-13 row)
+- Straus Family Creamery Organic Cream-Top Whole Milk (large red-cap bottle): per 1 cup (240mL) = 160 kcal, 9g protein, 11g carb, 9g fat (7g sat), 11g sugar, 0g fiber, 75mg sodium (manufacturer label, 2026-08-23). The 2%-equivalent convention (used briefly on 2026-08-22 to avoid double-counting a separately logged cream cap) is RETIRED: the cap's cream comes off the whole bottle, so only the pour's own share overlaps - roughly 30 cal on a half-gallon bottle. Log the pour at the whole-milk label and the cap as its own row; one basis beats two conventions, and erring slightly high on cream is the safe direction.
