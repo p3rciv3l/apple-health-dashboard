@@ -42,7 +42,7 @@ Established anchors (do not silently change):
 
 First-ever row for a packaged item: use the product's own label, cite it in Source, and record label-per-serving + serving count in Items so the next agent can scale it.
 
-A relayed estimate never beats a real label. If someone hands you cal/protein for a packaged product and the product's own label says otherwise, log the label numbers, mark the row `Home - packaged label`, and report the delta back with the label link - do not carry the estimate to stay consistent with what was already said. (Owner-confirmed 2026-08-23.)
+Brand named means brand looked up - owner, verbatim: "always if I tell u the brand that's what u look up." Pull that brand's own label before any number moves; do not substitute a generic or a similar product. A relayed estimate never beats a real label. If someone hands you cal/protein for a packaged product and the product's own label says otherwise, log the label numbers, mark the row `Home - packaged label`, and report the delta back with the label link - do not carry the estimate to stay consistent with what was already said. (Owner-confirmed 2026-08-23.)
 
 ## Rule 4: milk is never "whole milk" at home
 
