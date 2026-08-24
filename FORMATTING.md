@@ -42,6 +42,8 @@ Established anchors (do not silently change):
 
 First-ever row for a packaged item: use the product's own label, cite it in Source, and record label-per-serving + serving count in Items so the next agent can scale it.
 
+A relayed estimate never beats a real label. If someone hands you cal/protein for a packaged product and the product's own label says otherwise, log the label numbers, mark the row `Home - packaged label`, and report the delta back with the label link - do not carry the estimate to stay consistent with what was already said. (Owner-confirmed 2026-08-23.)
+
 ## Rule 4: milk is never "whole milk" at home
 
 The home milk is **Alexandre Family Farm A2 6%**. Never call it "whole milk" in a title or basis - say "A2 milk" (or "Alexandre A2 6%"). A drink OUT that contains whole milk keeps the venue's own description (e.g. a cafe's "pandan banana matcha with whole milk" stays as the venue describes it).
