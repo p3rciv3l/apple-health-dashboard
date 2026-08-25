@@ -39,6 +39,8 @@ check('/health page + app bundle', /const HAPP_JS = `/.test(src) && /<title>heal
 check('Health ingest route', /\/health\/ingest/.test(src));
 check('workout.json endpoint', /workout\.json/.test(src));
 check('data.json streams items live', /ITEMS/.test(appJs) && /items/.test(src));
+check('Workout-only day synthesis (Owner 8/25)', /negative net calories/.test(src) && /minFoodDay/.test(src), 'freshRows no longer synthesizes zero rows for workout-only days');
+check('Workout burn split rule Legs 250 / else 200', /has\('Legs'\) \? 250 : \(has\('Push'\) \|\| has\('Pull'\)\) \? 200 : 0/.test(src), 'wkBurnFor no longer returns Legs 250 / Push-Pull 200');
 
 console.log('== functional render test ==');
 const tmp = mkdtempSync(join(tmpdir(), 'cbum-'));

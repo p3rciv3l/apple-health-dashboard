@@ -349,6 +349,27 @@ async function freshRows(env, ctx) {
       rows.sort((a, b) => (a.date < b.date ? -1 : 1));
     }
   } catch (e) { /* rollup-only fallback: keep the chart working if items fail */ }
+  /* Owner 8/25 ("if you see something pop up for a day then it needs to do
+     the negative net calories... if it's legs you do 250 and that's the only
+     diff"): a day with a workout session but no food logged yet still gets a
+     zero row, so the day renders and its Calories blow-up carries the burn
+     estimate (wkBurnFor: Legs 250, Push/Pull 200) and the negative net.
+     Scoped to the tracking era (>= the earliest food day) so pre-tracker
+     history doesn't fill with empty bars. */
+  try {
+    const wkD = await getWorkout(env, ctx || null);
+    const have2 = new Set(rows.map(r => r.date));
+    const minFoodDay = rows.length ? rows[0].date : null;
+    const extra = new Set();
+    for (const split of Object.keys((wkD && wkD.splits) || {})) {
+      for (const sess of wkD.splits[split] || []) {
+        const d = sess && sess.date;
+        if (d && /^\d{4}-\d{2}-\d{2}$/.test(d) && !have2.has(d) && (!minFoodDay || d >= minFoodDay)) extra.add(d);
+      }
+    }
+    for (const day of extra) rows.push({ date: day, calories: 0, protein: 0, carbs: 0, fat: 0, satfat: 0, sugar: 0, fiber: 0, sodium: 0 });
+    if (extra.size) rows.sort((a, b) => (a.date < b.date ? -1 : 1));
+  } catch (e) { /* food-only fallback: never let a workout read break the chart */ }
   await seedRowsSig(env);
   const sg = sig(JSON.stringify(rows));
   const changed = sg !== MEM.rowsSig;
