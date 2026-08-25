@@ -2,7 +2,7 @@ name: test-deploy
 
 on:
   push:
-    branches: [main, feature/apple-health]
+    branches: [main, deploy/prod]
   workflow_dispatch:
 
 permissions:
@@ -32,7 +32,7 @@ jobs:
     name: Deploy cbum-chart worker
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/feature/apple-health'
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/deploy/prod'
     steps:
       - uses: actions/checkout@v4
       - name: Upload worker.js (fetch-merge settings, multipart PUT)
