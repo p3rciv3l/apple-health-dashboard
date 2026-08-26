@@ -111,7 +111,7 @@ Established per-unit bases; always back into macros from these, never re-derive.
 
 - Barber's Sweet Red Cheddar: block = 780 kcal, 49.5g protein (manufacturer-confirmed 2026-08-17)
 - Alexandre Family Farm A2 6% milk: carton = 1,620 kcal, 66g protein
-- Sascha Fitness Hydrolyzed Whey Protein Isolate: 2 scoops (66g) = 220 kcal, 50g protein (110/25p per scoop)
+- Sascha Fitness Hydrolyzed Whey Protein Isolate (unflavored): per 1 scoop (31g) = 110 kcal, 26g protein, <1g carb, 0g fat, 95mg sodium (official panel image, saschafitness.com, verified 2026-08-26; supersedes the older 110/25p-per-33g basis - rows logged on the old basis stand as logged)
 - Kirkland Signature liquid egg whites: per serving (3 Tbsp / 46g) = 25 kcal, 5g protein, 1g carb, 75mg sodium
 - Whole Foods Market Pasteurized Liquid Egg Whites: per serving (3 Tbsp / 46g) = 20 kcal, 5g protein, 80mg sodium (~10 servings per 16oz carton). Carton photoed 2026-08-21; owner confirmed carton is finished - historical rows on the Kirkland basis stand as logged. Use this basis for any future carton of this product; Kirkland stays the basis for Kirkland rows.
 - Bragg Nutritional Yeast: per 2 Tbsp (10g) = 40 kcal, 5g protein, 3g carb, 2g fiber, 20mg sodium
