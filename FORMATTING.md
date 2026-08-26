@@ -99,6 +99,12 @@ Empty is reserved for genuinely unknowable cases, and when you use it, say in It
 
 The chart now marks any day that still has a blank: that nutrient renders as "1,240+" with an amber "partial - N of M items missing" note and the day title carries a partial badge, so a floor never reads as a total.
 
+## Rule 14: the Items database is the pantry shelf
+
+The "Items" database on the owner's Notion "meals" page (database id 1160e6eb-7099-41ce-8e11-7268cf67d320) holds one row per individual product - not meals, not combos. Title = specific brand + full product name + serving basis (e.g. "Wildwood Organic High Protein Tofu, Super Firm (per 1/5 block = 91g)"). The eight number fields hold exact per-serving label macros, and the label evidence (label photo, or the supplier email / official product page when no photo exists) is attached in the row's Chart files property.
+
+When the owner sends a nutrition-label photo, check Items first: if the product has no row yet, add one with the label's exact per-serving numbers and the photo attached, then log what he ate per the other rules. If the label disagrees with an existing Items row, the label wins - update the row and flag the delta. (Owner rule, 2026-08-21/22: "an ingredients list instead of meals"; "save items the user takes photos of into meals too".)
+
 ## Known product bases (registry)
 
 Established per-unit bases; always back into macros from these, never re-derive. Percentages/fractions stay exact per Rule 6.
