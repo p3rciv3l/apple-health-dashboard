@@ -2478,10 +2478,13 @@ const SVGCharts = (function () {
         const dsm = model.datasets[e.di];
         const v = proj ? model.ghosts[e.di] : dsm.data[idx];
         if (v === null || v === undefined || !isFinite(v)) continue;
+        /* Owner 8/26: the Calories figure is NET - gross intake minus the
+           day's estimated workout burn (Aug 26: 1,175 gross -> 975 net). */
+        const vNet = (!proj && dsm.key === 'calories' && date) ? v - wkBurnFor(date) : v;
         const miss = (date && dsm.key) ? gapCount(date, dsm.key) : 0;
         if (miss) anyPartial = true;
         rows += '<div class="r"><span class="chip" style="background:' + dsm.color + '"></span><span>' +
-          escXml(dsm.label) + ': ' + escXml(new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(Math.round(v))) + (miss ? '+' : '') + '</span>' +
+          escXml(dsm.label) + ': ' + escXml(new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(Math.round(vNet))) + (miss ? '+' : '') + '</span>' +
           (miss ? '<span class="pt">partial &middot; ' + miss + ' of ' + dayItemCount(date) + ' items missing</span>' : '') + '</div>';
       }
       if (!rows) return null;

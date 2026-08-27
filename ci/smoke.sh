@@ -28,6 +28,7 @@ APP_MARKERS=(
   'focusBar(di, i, segs)'  # blow-up focus stack + tooltip include the workout band (Owner 8/26: blow-up exactly pre-change)
   'splitSlug'           # split tabs keep ?k= and other params on real links
   'custNum.blur()'      # custom-days Enter dismisses the keyboard (Owner 8/26)
+  "v - wkBurnFor(date)"  # Calories tooltip shows net (gross minus workout burn) (Owner 8/26)
 )
 
 missing=""
