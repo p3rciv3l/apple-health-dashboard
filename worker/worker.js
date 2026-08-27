@@ -3810,16 +3810,16 @@ function openMacroBlow(cv, row, m, onLeft, di, i) {
   const max = entries.length ? entries[entries.length - 1].v : 0;
   const colors = segColors(m.color, entries.length);
   const segs = entries.map((e, i) => ({ name: e.name, v: e.v, color: colors[i], url: e.url, rec: e.rec }));
-  // Hatched estimated-burn segment pinned at the top of the Calories stack.
+  // Estimated-burn row: list-only (hatched dot, '-N kcal'); never a bar/stack segment (Owner 8/26).
   const wob = m.key === 'calories' ? wkBurnFor(row.date) : 0;
-  if (wob) segs.unshift({ name: 'Workout', v: wob, color: m.color, wo: 1, disp: '-' + wob + ' K Cal' });
+  if (wob) segs.unshift({ name: 'Workout', v: wob, color: m.color, wo: 1, disp: '-' + wob + ' kcal' });
   let focus = null;
   const eng = cv && cv.__svgChart;
   if (eng && di != null && i != null && segs.length) {
     // The rendering engine hides the bar rect and stacks the item bands in
     // place; hover over it keeps the exact band palette (same effect as the
     // canvas build's per-index hover swap).
-    if (eng.focusBar(di, i, segs)) {
+    if (eng.focusBar(di, i, segs.filter(s => !s.wo))) {
       focus = { chart: eng.fake, di: di, color: m.color, hover: 0 };
     }
   }
