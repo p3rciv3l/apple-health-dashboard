@@ -2236,6 +2236,13 @@ const SVGCharts = (function () {
       eng.svg = host.querySelector('svg');
       // bar element references for hover shade + hit tests
       eng.barEls = eng.svg.querySelectorAll('rect.bar');
+      /* Owner 8/26 ("the green bar has no shading on it"): a re-render (any
+         resize - iOS viewport churn, the blow-up dock itself) rebuilds the
+         svg from scratch and silently drops the blow-up's stacked bands,
+         leaving the plain bar under the open panel. Redraw the stack for
+         the still-open blow-up. closeBlow runs clearFocus first, so a closed
+         blow-up never re-draws. */
+      if (eng.focus && eng.focus.segs) { const f = eng.focus; focusBar(f.di, f.i, f.segs); }
     }
 
     function axisBorder(s, pos, A, dpr, theme) {
@@ -2840,7 +2847,7 @@ const SVGCharts = (function () {
       if (!el) return false;
       const tot = segs.reduce((a, s) => a + s.v, 0);
       if (!tot) return false;
-      eng.focus = { di: di, i: idx, el: el, prevDisplay: el.style.display };
+      eng.focus = { di: di, i: idx, el: el, prevDisplay: el.style.display, segs: segs };
       facade.data.datasets[di] = facade.data.datasets[di] || {};
       el.setAttribute('display', 'none');
       const gg = document.createElementNS('http://www.w3.org/2000/svg', 'g');

@@ -29,6 +29,7 @@ APP_MARKERS=(
   'splitSlug'           # split tabs keep ?k= and other params on real links
   'custNum.blur()'      # custom-days Enter dismisses the keyboard (Owner 8/26)
   "v - wkBurnFor(date)"  # Calories tooltip shows net (gross minus workout burn) (Owner 8/26)
+  'focusBar(f.di, f.i, f.segs)'  # blow-up stack re-applied after resize re-renders (Owner 8/26: no shading on the green bar)
 )
 
 missing=""
