@@ -912,9 +912,9 @@ const CSS = `
   .blow-bar { flex:none; width:34px; display:flex; flex-direction:column; border-radius:6px; overflow:hidden; background:#f4f4f4; }
   .blow-bar > div { min-height:3px; border-top:1px solid rgba(255,255,255,0.9); }
   .blow-bar > div:first-child { border-top:0; }
-  /* Workout burn segment (Owner 8/19): hatched top of the Calories blow-up's
-     stacked bar + matching hatched row dot - reads as "estimate", not food. */
-  .bseg-wo { background:repeating-linear-gradient(135deg,#fafbfc 0px,#fafbfc 4px,#ced3da 4px,#ced3da 6px); }
+  /* Workout burn row (Owner 8/26): hatched row dot only - reads as
+     "estimate", not food. It used to also hatch a segment on the stacked
+     bar; the bar is food-only now, a subtraction can't be a stacked block. */
   .blow-item .dot.wodot { background:repeating-linear-gradient(135deg,#fff 0px,#fff 2px,#d2d7de 2px,#d2d7de 4px); border:1px solid #ccd1d8; }
   /* Rows spread across the full sidebar height; the bar next to them fills it
      too, head to Total - nothing floats at the top with dead space below. */
@@ -3610,7 +3610,9 @@ function blowPanel(cv, title, segs, unit, total, onLeft, focus, dayUrl) {
   let inner = '<div class="blow-head"><span>' + headTxt + '</span></div>';
   if (segs.length) {
     const tot = total != null ? total : segs.reduce((a, s) => a + s.v, 0);
-    const bar = segs.map(s => s.wo ? '<div class="bseg-wo" style="flex:' + s.v + '" title="' + s.name + '"></div>' : '<div style="flex:' + s.v + ';background:' + s.color + '" title="' + s.name + '"></div>').join('');
+    // Owner 8/26: the workout burn row stays in the list but never renders in
+    // the stacked bar - a subtraction can't be a block on top of the food.
+    const bar = segs.filter(s => !s.wo).map(s => '<div style="flex:' + s.v + ';background:' + s.color + '" title="' + s.name + '"></div>').join('');
     const list = segs.map((s, si) =>
       (linksOn && s.url ? '<a class="blow-item" data-nseg="' + si + '" data-nnotion="1" href="' + notionUrl(s.url) + '">' : '<span class="blow-item">') +
       (s.wo ? '<span class="dot wodot"></span>' : '<span class="dot" style="background:' + s.color + '"></span>') + '<span class="n">' + s.name + '</span><span class="v">' + (s.disp || fmtVal(s.v, unit)) + '</span></' + (linksOn && s.url ? 'a' : 'span') + '>').join('');
@@ -3810,7 +3812,7 @@ function openMacroBlow(cv, row, m, onLeft, di, i) {
   const segs = entries.map((e, i) => ({ name: e.name, v: e.v, color: colors[i], url: e.url, rec: e.rec }));
   // Hatched estimated-burn segment pinned at the top of the Calories stack.
   const wob = m.key === 'calories' ? wkBurnFor(row.date) : 0;
-  if (wob) segs.unshift({ name: 'Workout', v: wob, color: m.color, wo: 1, disp: '-' + wob + ' est' });
+  if (wob) segs.unshift({ name: 'Workout', v: wob, color: m.color, wo: 1, disp: '-' + wob + ' K Cal' });
   let focus = null;
   const eng = cv && cv.__svgChart;
   if (eng && di != null && i != null && segs.length) {

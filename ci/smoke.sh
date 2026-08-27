@@ -23,8 +23,8 @@ PAGE_MARKERS=(
 APP_MARKERS=(
   'dataset.avg'         # Average modifier click handling (page markers above pin the data-avg attr)
   'Nothing logged yet.' # blow-up empty state (was a ReferenceError 8/17)
-  'Workout -'           # "Workout -N est" row in Calories blow-up
-  'bseg-wo'             # hatched workout burn bar segment
+  "' K Cal'"            # "Workout -N K Cal" burn row label (Owner 8/26; was "-N est")
+  'segs.filter(s => !s.wo)'  # workout burn excluded from the stacked bar (Owner 8/26; bar is food-only)
   'splitSlug'           # split tabs keep ?k= and other params on real links
 )
 
