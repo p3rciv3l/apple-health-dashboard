@@ -26,7 +26,7 @@ check('All time selector', /data-w="0">All time</.test(pageTpl));
 check('Average modifier handler (app.js)', /dataset.avg/.test(appJs), 'avg modifier click handling missing from app.js');
 check('Average numbers pane', /avgrow|avgpane|avgAlign/.test(src), 'average numbers pane markup/alignment missing');
 check('Workout estimated burn row in Calories blow-up (Owner 8/26: "-N kcal" label)', /disp: '-' \+ wob \+ ' kcal'/.test(appJs), '"Workout -N kcal" row missing');
-check('Workout burn excluded from blow-up bar (Owner 8/26: bar is food-only)', /segs\.filter\(s => !s\.wo\)/.test(appJs), 'workout segment back in the stacked bar');
+check('Workout hatched segment in Calories blow-up bar (Owner 8/26: blow-up view restored)', /s\.wo \? '<div class="bseg-wo"/.test(appJs), 'hatched workout segment missing from the blow-up panel bar');
 check('Workout burn excluded from tapped-bar focus stack (Owner 8/26)', /focusBar\(di, i, segs\.filter\(s => !s\.wo\)\)/.test(appJs), 'workout band back in the in-chart focus stack');
 check('Custom-days Enter blurs the field (Owner 8/26)', /e\.key === 'Enter'\) \{ applyCustom\(\); custNum\.blur\(\);/.test(appJs), 'Enter-to-blur on the custom-days input missing');
 check('Workout split tabs are real links', /<a data-s="Push">Push<\/a><a data-s="Pull">Pull<\/a><a data-s="Legs">Legs<\/a>/.test(src));

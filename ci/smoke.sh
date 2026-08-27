@@ -24,7 +24,8 @@ APP_MARKERS=(
   'dataset.avg'         # Average modifier click handling (page markers above pin the data-avg attr)
   'Nothing logged yet.' # blow-up empty state (was a ReferenceError 8/17)
   "disp: '-' + wob + ' kcal'"  # "Workout -N kcal" burn row label (Owner 8/26; was "-N est")
-  'segs.filter(s => !s.wo)'  # workout burn excluded from the stacked bar + focus stack (Owner 8/26; bars are food-only)
+  'bseg-wo'             # hatched workout burn segment in the blow-up panel bar (Owner 8/26: blow-up view restored)
+  'focusBar(di, i, segs.filter(s => !s.wo))'  # tapped-bar focus stack stays food-only (Owner 8/26: his original 5:34 complaint)
   'splitSlug'           # split tabs keep ?k= and other params on real links
   'custNum.blur()'      # custom-days Enter dismisses the keyboard (Owner 8/26)
 )
