@@ -9587,6 +9587,29 @@ export default {
       }
     }
 
+    // Ops cleanup (2026-08-27): delete one metric from the health tables.
+    // Same X-Health-Key gate as ingest. Added after an ingest self-test row
+    // needed removing and the deploy token turned out to have no D1-write
+    // permission over the REST API - the worker binding is the only writer.
+    if (req.method === "POST" && url.pathname === "/health/admin/delete-metric") {
+      const key = req.headers.get("X-Health-Key") || "";
+      if (!env.HEALTH_INGEST_KEY || !safeEqual(key, env.HEALTH_INGEST_KEY)) {
+        return new Response("nope", { status: 401, headers: { "cache-control": "no-store" } });
+      }
+      let b = {};
+      try { b = await req.json(); } catch (e) {}
+      const metric = String(b.metric || "");
+      if (!metric) return new Response(JSON.stringify({ ok: false, error: "metric required" }), { status: 400, headers: jsonHeaders });
+      await healthInit(env);
+      const r1 = await env.HEALTH_DB.prepare("DELETE FROM metric_daily WHERE metric = ?").bind(metric).run();
+      const r2 = await env.HEALTH_DB.prepare("DELETE FROM hsample WHERE metric = ?").bind(metric).run();
+      ctx.waitUntil((async () => {
+        try { await refreshHealthSnapshot(env); } catch (e) {}
+        try { await env.CHART_KV.delete(HPAGE_KEY); HPAGE = null; HPAGE_AT = 0; } catch (e) {}
+      })());
+      return new Response(JSON.stringify({ ok: true, metric, metric_daily: r1.meta ? r1.meta.changes : null, hsample: r2.meta ? r2.meta.changes : null }), { headers: jsonHeaders });
+    }
+
     // Owner 8/17 perf: browsers fetch /favicon.ico on every page view; without
     // this route it burned a full gated page render (133KB) as the answer.
     if (url.pathname === "/favicon.ico") {
