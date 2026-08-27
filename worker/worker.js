@@ -3817,7 +3817,7 @@ function openMacroBlow(cv, row, m, onLeft, di, i) {
     // The rendering engine hides the bar rect and stacks the item bands in
     // place; hover over it keeps the exact band palette (same effect as the
     // canvas build's per-index hover swap).
-    if (eng.focusBar(di, i, segs.filter(s => !s.wo))) {
+    if (eng.focusBar(di, i, segs)) {
       focus = { chart: eng.fake, di: di, color: m.color, hover: 0 };
     }
   }
