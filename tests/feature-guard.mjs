@@ -19,6 +19,8 @@ const check = (feature, ok, detail = '') => {
 };
 
 console.log('== static feature markers ==');
+check('Google Health bridge: OAuth routes + daily weight poll (Wyze->Fitbit->Google Health replaces the dead shortcut ingest, Owner 8/27)', /ghealth_tokens_v1/.test(src) && /dataTypes\/weight\/dataPoints/.test(src) && /async scheduled\(event, env, ctx\)/.test(src) && /\/health\/fitbit\/callback/.test(src), 'ghealth token store, weight endpoint, scheduled handler, or callback route missing');
+
 check('Average modifier button (Macros seg)', /data-avg="1">Average</.test(pageTpl), 'data-avg="1">Average button missing from page template');
 check('3 day selector', /data-w="3">3 day</.test(pageTpl));
 check('7 day selector', /data-w="7">7 day</.test(pageTpl));
