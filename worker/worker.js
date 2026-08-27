@@ -5138,6 +5138,8 @@ function applyCustom() {
   renderWorkout();
 }
 custNum.addEventListener('input', applyCustom);
+// Owner 8/26: Enter applies and drops the keyboard (mobile).
+custNum.addEventListener('keydown', e => { if (e.key === 'Enter') { applyCustom(); custNum.blur(); } });
 custUnit.addEventListener('change', applyCustom);
 
 document.querySelectorAll('#wseg button').forEach(b => b.addEventListener('click', () => {

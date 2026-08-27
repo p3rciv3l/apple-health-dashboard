@@ -26,6 +26,7 @@ APP_MARKERS=(
   "disp: '-' + wob + ' kcal'"  # "Workout -N kcal" burn row label (Owner 8/26; was "-N est")
   'segs.filter(s => !s.wo)'  # workout burn excluded from the stacked bar + focus stack (Owner 8/26; bars are food-only)
   'splitSlug'           # split tabs keep ?k= and other params on real links
+  'custNum.blur()'      # custom-days Enter dismisses the keyboard (Owner 8/26)
 )
 
 missing=""

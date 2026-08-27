@@ -28,6 +28,7 @@ check('Average numbers pane', /avgrow|avgpane|avgAlign/.test(src), 'average numb
 check('Workout estimated burn row in Calories blow-up (Owner 8/26: "-N kcal" label)', /disp: '-' \+ wob \+ ' kcal'/.test(appJs), '"Workout -N kcal" row missing');
 check('Workout burn excluded from blow-up bar (Owner 8/26: bar is food-only)', /segs\.filter\(s => !s\.wo\)/.test(appJs), 'workout segment back in the stacked bar');
 check('Workout burn excluded from tapped-bar focus stack (Owner 8/26)', /focusBar\(di, i, segs\.filter\(s => !s\.wo\)\)/.test(appJs), 'workout band back in the in-chart focus stack');
+check('Custom-days Enter blurs the field (Owner 8/26)', /e\.key === 'Enter'\) \{ applyCustom\(\); custNum\.blur\(\);/.test(appJs), 'Enter-to-blur on the custom-days input missing');
 check('Workout split tabs are real links', /<a data-s="Push">Push<\/a><a data-s="Pull">Pull<\/a><a data-s="Legs">Legs<\/a>/.test(src));
 check('Tab links keep embedded params client-side', /splitSlug/.test(appJs) && /metaKey \|\| ev\.ctrlKey/.test(appJs));
 check('Blow-up empty state defined', /Nothing logged yet\./.test(appJs), 'empty_msg reference without definition');
