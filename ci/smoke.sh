@@ -25,11 +25,12 @@ APP_MARKERS=(
   'Nothing logged yet.' # blow-up empty state (was a ReferenceError 8/17)
   "disp: '-' + wob + ' kcal'"  # "Workout -N kcal" burn row label (Owner 8/26; was "-N est")
   'bseg-wo'             # hatched workout burn segment in the blow-up panel bar (Owner 8/26: blow-up view restored)
-  'focusBar(di, i, segs)'  # blow-up focus stack + tooltip include the workout band (Owner 8/26: blow-up exactly pre-change)
+  'drawBlowStack(eng, di, i, segs)'  # blow-up in-chart stack drawn via its own decoupled renderer, workout band included (Owner 8/26)
   'splitSlug'           # split tabs keep ?k= and other params on real links
   'custNum.blur()'      # custom-days Enter dismisses the keyboard (Owner 8/26)
   "v - wkBurnFor(date)"  # Calories tooltip shows net (gross minus workout burn) (Owner 8/26)
-  'focusBar(f.di, f.i, f.segs)'  # blow-up stack re-applied after resize re-renders (Owner 8/26: no shading on the green bar)
+  'eng.focusBar(f.di, f.i, f.segs)'  # blow-up stack re-applies after re-renders via the generic onRender hook (Owner 8/26: no shading on the green bar)
+  'eng.fills.estimate'  # workout band hatched in the in-chart blow-up stack (Owner 8/26: "the green block thing at the top remains")
 )
 
 missing=""

@@ -2227,7 +2227,11 @@ const SVGCharts = (function () {
      blue, teal and blended into red. UNIVERSAL over-goal stripe = white,
      over a faint red wash that keeps the over-goal = red cue. */
         '<pattern id="' + uid + 'ovh" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1.5,4.5 l3,3 M0,0 l6,6 M4.5,-1.5 l3,3" stroke="rgba(255,255,255,0.95)" stroke-width="1.7"/></pattern>' +
-        '<pattern id="' + uid + 'ovhdrk" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1.5,4.5 l3,3 M0,0 l6,6 M4.5,-1.5 l3,3" stroke="rgba(110,10,25,0.95)" stroke-width="1.7"/></pattern></defs>' +
+        '<pattern id="' + uid + 'ovhdrk" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1.5,4.5 l3,3 M0,0 l6,6 M4.5,-1.5 l3,3" stroke="rgba(110,10,25,0.95)" stroke-width="1.7"/></pattern>' +
+        /* Estimate hatch (Owner 8/26): diagonal grey-white stripes matching the
+           blow-up panel's .bseg-wo - the generic "this is an estimate, not
+           food" fill, exposed to overlays as fills.estimate. */
+        '<pattern id="' + uid + 'esth" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fafbfc"/><line x1="0" y1="0" x2="0" y2="6" stroke="#ced3da" stroke-width="2"/></pattern></defs>' +
         parts.join('') + '</svg>';
       const oldTip = tip.parentNode ? null : null;
       host.innerHTML = '';
@@ -2236,13 +2240,12 @@ const SVGCharts = (function () {
       eng.svg = host.querySelector('svg');
       // bar element references for hover shade + hit tests
       eng.barEls = eng.svg.querySelectorAll('rect.bar');
-      /* Owner 8/26 ("the green bar has no shading on it"): a re-render (any
-         resize - iOS viewport churn, the blow-up dock itself) rebuilds the
-         svg from scratch and silently drops the blow-up's stacked bands,
-         leaving the plain bar under the open panel. Redraw the stack for
-         the still-open blow-up. closeBlow runs clearFocus first, so a closed
-         blow-up never re-draws. */
-      if (eng.focus && eng.focus.segs) { const f = eng.focus; focusBar(f.di, f.i, f.segs); }
+      /* Generic post-render hooks (Owner 8/26: "there's some dependencies you
+         need to break"). Every render rebuilds the svg from scratch, dropping
+         ephemeral overlays; an overlay repaints itself through onRender
+         instead of the engine naming it here (the blow-up stack used to be
+         re-applied by name at this exact spot). */
+      for (const h of (eng.renderHooks || [])) h();
     }
 
     function axisBorder(s, pos, A, dpr, theme) {
@@ -2861,7 +2864,7 @@ const SVGCharts = (function () {
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         rect.setAttribute('x', rn2(b.x)); rect.setAttribute('y', rn2(ycur));
         rect.setAttribute('width', rn2(b.w)); rect.setAttribute('height', rn2(Math.max(h, 0)));
-        rect.setAttribute('fill', s.color);
+        rect.setAttribute('fill', s.fill || s.color); // per-seg fill override (e.g. the hatched estimate band)
         gg.appendChild(rect);
       }
       // keep the frame/goal lines above the repaint like the canvas build
@@ -2991,6 +2994,12 @@ const SVGCharts = (function () {
       },
       focusBar: focusBar,
       clearFocus: clearFocus,
+      /* Named fills + post-render hooks: the generic primitives overlays
+         compose from, keeping overlay-specific code (the blow-up stack) out
+         of the engine (Owner 8/26: "break the dependencies"). */
+      fills: { estimate: 'url(#' + uid + 'esth)' },
+      onRender: function (cb) { (eng.renderHooks = eng.renderHooks || []).push(cb); },
+      focusState: function () { return eng.focus; },
       chartArea: () => eng.chartArea,
       fake: facade,
       host: host
@@ -3809,6 +3818,23 @@ function wkBurnFor(dateStr) {
   const has = split => ((wk && wk[split]) || []).some(sess => sess.date === dateStr);
   return has('Legs') ? 250 : (has('Push') || has('Pull')) ? 200 : 0;
 }
+/* The blow-up's in-chart stack (Owner 8/26: "the green block thing at the
+   top remains" + "there's some dependencies you need to break"). Everything
+   blow-up-specific lives here instead of inside the chart engine: the
+   estimated workout band gets the hatched estimate fill (matching the
+   panel's .bseg-wo - reads as an estimate, not food), and the stack
+   re-applies itself through the generic onRender hook whenever the engine
+   rebuilds the svg (a resize used to wipe it). The engine only knows
+   colored bands, named fills, and hooks. */
+function drawBlowStack(eng, di, i, segs) {
+  const mapped = segs.map(s => s.wo ? Object.assign({}, s, { fill: eng.fills.estimate }) : s);
+  const ok = eng.focusBar(di, i, mapped);
+  if (ok && !eng.__blowHooked) {
+    eng.__blowHooked = 1;
+    eng.onRender(function () { const f = eng.focusState(); if (f && f.segs) eng.focusBar(f.di, f.i, f.segs); });
+  }
+  return ok;
+}
 function openMacroBlow(cv, row, m, onLeft, di, i) {
   const idx = ITEM_KEYS.indexOf(m.key) + 1; // tuple[0] is the item name
   const entries = (ITEMS[row.date] || [])
@@ -3827,7 +3853,7 @@ function openMacroBlow(cv, row, m, onLeft, di, i) {
     // The rendering engine hides the bar rect and stacks the item bands in
     // place; hover over it keeps the exact band palette (same effect as the
     // canvas build's per-index hover swap).
-    if (eng.focusBar(di, i, segs)) {
+    if (drawBlowStack(eng, di, i, segs)) {
       focus = { chart: eng.fake, di: di, color: m.color, hover: 0 };
     }
   }
