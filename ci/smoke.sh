@@ -37,7 +37,7 @@ APP_MARKERS=(
 # endpoint (Owner 8/27: Wyze->Fitbit->Google Health replaces shortcut ingest).
 GHLOC=""
 for i in $(seq 1 12); do
-  GHLOC=$(curl -fsSI "$BASE/health/fitbit/auth?$CB&_=gh" 2>/dev/null | tr -d '\r' | awk 'BEGIN{IGNORECASE=1} /^location:/{print $2}' || true)
+  GHLOC=$(curl -fsS -o /dev/null -D - "$BASE/health/fitbit/auth?$CB&_=gh" 2>/dev/null | tr -d '\r' | awk 'BEGIN{IGNORECASE=1} /^location:/{print $2}' || true)
   [ -n "$GHLOC" ] && break
   sleep 10
 done
