@@ -47,7 +47,7 @@ check('Health ingest route', /\/health\/ingest/.test(src));
 check('workout.json endpoint', /workout\.json/.test(src));
 check('data.json streams items live', /ITEMS/.test(appJs) && /items/.test(src));
 check('Workout-only day synthesis (Owner 8/25)', /negative net calories/.test(src) && /minFoodDay/.test(src), 'freshRows no longer synthesizes zero rows for workout-only days');
-check('One-off per-date workout burn override (owner-texted actual: 2026-08-27 = 350 kcal; NOT a recalibration of the split rule)', /BURN_OVERRIDES = \{ "2026-08-27": 350 \}/.test(src) && /if \(o != null\) return o/.test(src), 'per-date burn override missing');
+check('One-off per-date workout burn overrides (owner-texted actuals: 2026-08-27 = 350 kcal, 2026-09-02 = 600 kcal; NOT a recalibration of the split rule)', /BURN_OVERRIDES = \{ "2026-08-27": 350, "2026-09-02": 600 \}/.test(src) && /if \(o != null\) return o/.test(src), 'per-date burn override missing');
 check('Workout burn split rule Legs 250 / else 200', /has\('Legs'\) \? 250 : \(has\('Push'\) \|\| has\('Pull'\)\) \? 200 : 0/.test(src), 'wkBurnFor no longer returns Legs 250 / Push-Pull 200');
 
 console.log('== functional render test ==');

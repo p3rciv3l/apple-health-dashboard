@@ -3814,10 +3814,10 @@ function alignBlowList(panel) {
 // day's Calories breakdown - Legs 250, Push/Pull 200 - never stored in
 // Notion; computed at render from the Notion session dates already in WK.
 // One-off reported burns: actuals the owner texted, applied in place for a
-// single date (2026-08-27: 350 kcal, "fucking crazy" session). This is NOT a
+// date (2026-08-27: 350 kcal, "fucking crazy" session; 2026-09-02: 600 kcal, hard morning bike ride). This is NOT a
 // recalibration - the flat-split estimate below stays the default everywhere
 // else; add a date here only when the owner reports an actual.
-const BURN_OVERRIDES = { "2026-08-27": 350 };
+const BURN_OVERRIDES = { "2026-08-27": 350, "2026-09-02": 600 };
 function wkBurnFor(dateStr) {
   const o = BURN_OVERRIDES[dateStr];
   if (o != null) return o;
